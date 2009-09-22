@@ -1,5 +1,7 @@
 -define(COUCHDB_CONN, {"localhost", 5984}).
 -define(PROJECT_DB, "analytics").
 -define(VIEW_LANG, <<"javascript">>).
--define(TIME_VIEW, "time").
 -define(DESIGN_DOC, "analytics").
+-define(TIME_VIEW, "time").
+-define(URI_VIEW, "url").
+-define(DOMAIN_VIEW, "domain").
