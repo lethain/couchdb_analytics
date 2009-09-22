@@ -22,17 +22,20 @@ get_timestamp() ->
 %%       request_proplist = [request_property()]
 %%       request_property = {request_key(), request_value()}
 %%       request_value = string() | binary() | number()
-%%       request_key = referer | ip | user_agent | content_type | accept_language | domain | url | query_path
+%%       request_key = referer | ip | user_agent | content_type | accept_language | domain | uri | query_path
 record(Opts) ->
-    Opts1 = lists:map(fun({Key,X}) ->
-			      case is_list(X) of
-				  true ->
-				      {Key, list_to_binary(X)};
-				  false ->
-				      {Key, X}
-			      end end, Opts),
-    Opts2 = [{"time", get_timestamp()} | Opts1],
-    erlang_couchdb:create_document(?COUCHDB_CONN, ?PROJECT_DB, Opts2).
+    spawn(fun() ->
+		  Opts1 = lists:map(fun({Key,X}) ->
+					    case is_list(X) of
+						true ->
+						    {Key, list_to_binary(X)};
+						false ->
+						    {Key, X}
+					    end end, Opts),
+		  Opts2 = [{"time", get_timestamp()} | Opts1],
+		  erlang_couchdb:create_document(?COUCHDB_CONN, ?PROJECT_DB, Opts2)
+	  end),
+    ok.
 
 %% @doc return the views which make up the Pitance design document.
 design() ->
