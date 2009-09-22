@@ -40,7 +40,7 @@ record(Opts) ->
 %% @doc return the views which make up the Pitance design document.
 design() ->
    % format is {Name, MapFunction} | {Name, MapFunction, ReduceFunction}
-   [{?TIME_VIEW, <<"function(doc) { var time = new Date(doc.time*1000); emit([doc.domain, time.getYear(), time.getMonth(), time.getHours(), time.getMinutes()], 1);}">>, <<"function(keys, values) { return sum(values); }">>},
+   [{?TIME_VIEW, <<"function(doc) { var time = new Date(doc.time*1000); emit([doc.domain, time.getFullYear(), time.getMonth(), time.getUTCDate(), time.getHours(), time.getMinutes()], 1);}">>, <<"function(keys, values) { return sum(values); }">>},
     {?URI_VIEW, <<"function(doc) { emit(Array.concat([doc.domain],doc.uri.split(\"/\").filter(function(x) { return (x != \"\"); })), 1); }">>, <<"function(keys, values) { return sum(values); }">>},
     {?DOMAIN_VIEW, <<"function(doc) { emit(doc.domain, 1);}">>, <<"function(keys, values) { return sum(values); }">>}
    ].
